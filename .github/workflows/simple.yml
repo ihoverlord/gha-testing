@@ -1,0 +1,16 @@
+name: Simple workflow
+
+on:
+  push:
+    branches:
+      - test
+      - main
+
+jobs:
+  simple-job:
+    runs-on: ubuntu-latest
+    env:
+      secret: a very secret key
+    steps:
+      - run: echo "Hello world"
+      - run: echo $secret
