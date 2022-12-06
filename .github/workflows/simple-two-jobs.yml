@@ -1,0 +1,23 @@
+name: Simple workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    env:
+      secret: a very secret key
+    steps:
+      - run: echo "Hello world"
+      - run: echo $secret
+      
+  job2:
+    runs-on: ubuntu-latest
+    env:
+      secret: a very secret key
+    steps:
+      - run: echo "Hello world, again"
+      - run: echo $secret
