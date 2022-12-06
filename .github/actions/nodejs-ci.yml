@@ -1,0 +1,59 @@
+name: "Install Node Deps and run tests"
+description: "Greet someone"
+inputs:
+  inputField: # id of input
+    description: "Who to greet"
+    required: true
+    default: "World"
+
+runs:
+  using: "composite"
+  steps:
+    - name: checkout the code
+      uses: actions/checkout@v3
+
+    - name: Read Node.js version to install from `.nvmrc`
+      run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+      id: nvm
+
+    - name: Install required Node.js version
+      uses: actions/setup-node@v3
+      with:
+        node-version: "${{ steps.nvm.outputs.NVMRC }}"
+
+   # - name: Use Node.js
+   #   uses: actions/setup-node@v3
+   #   with:
+   #     always-auth: true
+   #     node-version: "12.x"
+   #     registry-url: https://registry.npmjs.org
+   #     scope: "@himakar"
+
+    - name: install node modules
+      run: npm ci
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: v1-npm-deps-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: v1-npm-deps-
+
+    - name: run tests
+      run: npm test && npm run lint
+      shell: bash
+
+    - run: ./.github/scripts/test.sh
+
+    - name: build files
+      run: |
+        npm run build
+      shell: bash
+
+    - name: Upload build files
+      uses: actions/upload-artifact@v3
+      with:
+        name: buildFiles
+        path: build/files/
