@@ -1,4 +1,4 @@
-name: Nodejs Matrix workflow
+name: Nodejs simple workflow
 
 on:
   push:
