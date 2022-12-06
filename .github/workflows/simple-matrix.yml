@@ -19,7 +19,7 @@ jobs:
       - name: Install required Node.js version
         uses: actions/setup-node@v1
         with:
-          node-version: "{{ matrix.nodejs-version }}"
+          node-version: "${{ matrix.nodejs-version }}"
 
       - name: install node modules
         run: npm ci
@@ -32,6 +32,6 @@ jobs:
           key: v1-npm-deps-${{ hashFiles('**/package-lock.json') }}
           restore-keys: v1-npm-deps-
 
-      - name: run tests
-        run: ./.github/scripts/test.sh
-        shell: bash
+      # - name: run tests
+      #  run: ./.github/scripts/test.sh
+      #  shell: bash
