@@ -1,0 +1,39 @@
+name: Nodejs Matrix workflow
+
+on:
+  push:
+    branches:
+      - test
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout the code
+        uses: actions/checkout@v3
+
+      - name: Install required Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: install node modules
+        run: npm ci
+        shell: bash
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: v1-npm-deps-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: v1-npm-deps-
+
+      - name: run tests
+        run: npm run test
+        shell: bash
+      
+      - name: run lint
+        run: npm run lint
+        shell: bash
