@@ -1,4 +1,4 @@
-name: Simple workflow
+name: Simple two jobs workflow
 
 on:
   push:
